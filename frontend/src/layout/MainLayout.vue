@@ -49,22 +49,22 @@ import { Document, Stamp, View, Warning, Finished, List, OfficeBuilding } from '
 
 const route = useRoute()
 const router = useRouter()
-const user = getUser()
+const user = ref(getUser())
 const overdueCount = ref(0)
 
 const allMenus = [
-  { path: '/permits', title: '许可管理', icon: 'Document', roles: ['constructor', 'inspector', 'heritage', 'safety'] },
-  { path: '/approvals', title: '审批管理', icon: 'Stamp', roles: ['heritage', 'safety'] },
-  { path: '/inspections', title: '巡检管理', icon: 'View', roles: ['inspector'] },
-  { path: '/hazards', title: '隐患整改', icon: 'Warning', roles: ['constructor', 'inspector', 'safety'] },
-  { path: '/demolitions', title: '拆除验收', icon: 'Finished', roles: ['constructor', 'heritage', 'safety'] },
-  { path: '/buildings', title: '建筑管理', icon: 'OfficeBuilding', roles: ['constructor', 'inspector', 'heritage', 'safety'] },
-  { path: '/audit-logs', title: '审计日志', icon: 'List', roles: ['heritage', 'safety'] },
+  { path: '/permits', title: '许可管理', icon: Document, roles: ['constructor', 'inspector', 'heritage', 'safety'] },
+  { path: '/approvals', title: '审批管理', icon: Stamp, roles: ['heritage', 'safety'] },
+  { path: '/inspections', title: '巡检管理', icon: View, roles: ['inspector'] },
+  { path: '/hazards', title: '隐患整改', icon: Warning, roles: ['constructor', 'inspector', 'safety'] },
+  { path: '/demolitions', title: '拆除验收', icon: Finished, roles: ['constructor', 'heritage', 'safety'] },
+  { path: '/buildings', title: '建筑管理', icon: OfficeBuilding, roles: ['constructor', 'inspector', 'heritage', 'safety'] },
+  { path: '/audit-logs', title: '审计日志', icon: List, roles: ['heritage', 'safety'] },
 ]
 
 const visibleMenus = computed(() => {
-  if (!user?.role) return []
-  return allMenus.filter(m => m.roles.includes(user.role))
+  if (!user.value?.role) return []
+  return allMenus.filter(m => m.roles.includes(user.value.role))
 })
 
 const activeMenu = computed(() => {
@@ -85,6 +85,7 @@ const handleCommand = (cmd) => {
 }
 
 onMounted(async () => {
+  user.value = getUser()
   try {
     const res = await getOverdueAlert()
     overdueCount.value = res.alerts?.length || 0
