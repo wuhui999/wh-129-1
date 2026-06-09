@@ -5,33 +5,9 @@
         <h3>脚手架管理</h3>
       </div>
       <el-menu :default-active="activeMenu" router class="side-menu" background-color="#1a1a2e" text-color="#ccc" active-text-color="#409eff">
-        <el-menu-item index="/permits">
-          <el-icon><Document /></el-icon>
-          <span>许可管理</span>
-        </el-menu-item>
-        <el-menu-item index="/approvals">
-          <el-icon><Stamp /></el-icon>
-          <span>审批管理</span>
-        </el-menu-item>
-        <el-menu-item index="/inspections">
-          <el-icon><View /></el-icon>
-          <span>巡检管理</span>
-        </el-menu-item>
-        <el-menu-item index="/hazards">
-          <el-icon><Warning /></el-icon>
-          <span>隐患整改</span>
-        </el-menu-item>
-        <el-menu-item index="/demolitions">
-          <el-icon><Finished /></el-icon>
-          <span>拆除验收</span>
-        </el-menu-item>
-        <el-menu-item index="/buildings">
-          <el-icon><OfficeBuilding /></el-icon>
-          <span>建筑管理</span>
-        </el-menu-item>
-        <el-menu-item index="/audit-logs">
-          <el-icon><List /></el-icon>
-          <span>审计日志</span>
+        <el-menu-item v-for="item in visibleMenus" :key="item.path" :index="item.path">
+          <el-icon><component :is="item.icon" /></el-icon>
+          <span>{{ item.title }}</span>
         </el-menu-item>
       </el-menu>
     </el-aside>
@@ -69,15 +45,33 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getUser, logout, roleMap } from '../utils/auth'
 import { getOverdueAlert } from '../api'
+import { Document, Stamp, View, Warning, Finished, List, OfficeBuilding } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
 const user = getUser()
 const overdueCount = ref(0)
 
+const allMenus = [
+  { path: '/permits', title: '许可管理', icon: 'Document', roles: ['constructor', 'inspector', 'heritage', 'safety'] },
+  { path: '/approvals', title: '审批管理', icon: 'Stamp', roles: ['heritage', 'safety'] },
+  { path: '/inspections', title: '巡检管理', icon: 'View', roles: ['inspector'] },
+  { path: '/hazards', title: '隐患整改', icon: 'Warning', roles: ['constructor', 'inspector', 'safety'] },
+  { path: '/demolitions', title: '拆除验收', icon: 'Finished', roles: ['constructor', 'heritage', 'safety'] },
+  { path: '/buildings', title: '建筑管理', icon: 'OfficeBuilding', roles: ['constructor', 'inspector', 'heritage', 'safety'] },
+  { path: '/audit-logs', title: '审计日志', icon: 'List', roles: ['heritage', 'safety'] },
+]
+
+const visibleMenus = computed(() => {
+  if (!user?.role) return []
+  return allMenus.filter(m => m.roles.includes(user.role))
+})
+
 const activeMenu = computed(() => {
   const path = route.path
   if (path.startsWith('/permits')) return '/permits'
+  if (path.startsWith('/inspections')) return '/inspections'
+  if (path.startsWith('/hazards')) return '/hazards'
   return path
 })
 

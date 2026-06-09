@@ -32,9 +32,9 @@
       <el-table-column label="操作" width="160" fixed="right">
         <template #default="{ row }">
           <el-button link type="primary" @click="$router.push(`/permits/${row.id}`)">详情</el-button>
-          <el-button link type="warning" v-if="row.status === 'applied' && row.constructor_id === user?.id" @click="handleSubmit(row.id)">提交审批</el-button>
-          <el-button link type="success" v-if="row.status === 'can_scaffold' && row.constructor_id === user?.id" @click="handleStartUse(row.id)">开始使用</el-button>
-          <el-button link type="danger" v-if="row.status === 'in_use' && row.constructor_id === user?.id" @click="handleRequestDemolish(row.id)">申请拆除</el-button>
+          <el-button link type="warning" v-if="row.status === 'applied' && user?.role === 'constructor' && row.constructor_id === user?.id" @click="handleSubmit(row.id)">提交审批</el-button>
+          <el-button link type="success" v-if="row.status === 'can_scaffold' && user?.role === 'constructor' && row.constructor_id === user?.id" @click="handleStartUse(row.id)">开始使用</el-button>
+          <el-button link type="danger" v-if="row.status === 'in_use' && user?.role === 'constructor' && row.constructor_id === user?.id" @click="handleRequestDemolish(row.id)">申请拆除</el-button>
         </template>
       </el-table-column>
     </el-table>

@@ -68,11 +68,11 @@
         <el-card class="detail-card">
           <template #header><span>状态操作</span></template>
           <div class="action-area">
-            <el-button v-if="permit?.status === 'applied' && permit?.constructor_id === user?.id" type="warning" @click="handleSubmit" style="width:100%">提交审批</el-button>
-            <el-button v-if="permit?.status === 'can_scaffold' && permit?.constructor_id === user?.id" type="success" @click="handleStartUse" style="width:100%">开始使用</el-button>
-            <el-button v-if="permit?.status === 'in_use' && permit?.constructor_id === user?.id" type="danger" @click="handleRequestDemolish" style="width:100%">申请拆除</el-button>
-            <el-button v-if="permit?.status === 'in_use'" type="primary" @click="$router.push({ path: '/inspections/create', query: { permit_id: permit?.id } })" style="width:100%">新建巡检</el-button>
-            <el-button v-if="permit?.status === 'pending_demolish'" type="primary" @click="showDemolishDialog = true" style="width:100%">提交拆除验收</el-button>
+            <el-button v-if="permit?.status === 'applied' && user?.role === 'constructor' && permit?.constructor_id === user?.id" type="warning" @click="handleSubmit" style="width:100%">提交审批</el-button>
+            <el-button v-if="permit?.status === 'can_scaffold' && user?.role === 'constructor' && permit?.constructor_id === user?.id" type="success" @click="handleStartUse" style="width:100%">开始使用</el-button>
+            <el-button v-if="permit?.status === 'in_use' && user?.role === 'constructor' && permit?.constructor_id === user?.id" type="danger" @click="handleRequestDemolish" style="width:100%">申请拆除</el-button>
+            <el-button v-if="permit?.status === 'in_use' && user?.role === 'inspector'" type="primary" @click="$router.push({ path: '/inspections/create', query: { permit_id: permit?.id } })" style="width:100%">新建巡检</el-button>
+            <el-button v-if="permit?.status === 'pending_demolish' && user?.role === 'constructor'" type="primary" @click="showDemolishDialog = true" style="width:100%">提交拆除验收</el-button>
           </div>
         </el-card>
 

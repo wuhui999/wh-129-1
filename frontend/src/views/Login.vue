@@ -34,6 +34,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { login } from '../api'
 import { setToken, setUser } from '../utils/auth'
+import { getRoleDefaultPath } from '../router'
 import { ElMessage } from 'element-plus'
 
 const router = useRouter()
@@ -56,7 +57,7 @@ const handleLogin = async () => {
     setToken(res.access_token)
     setUser(res.user)
     ElMessage.success('登录成功')
-    router.push('/')
+    router.push(getRoleDefaultPath(res.user.role))
   } finally {
     loading.value = false
   }
