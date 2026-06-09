@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional, List
 from datetime import datetime
 
@@ -24,15 +24,13 @@ class UserCreate(BaseModel):
 
 
 class UserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     username: str
     real_name: str
     role: str
     org_name: str
     phone: str
-
-    class Config:
-        from_attributes = True
 
 
 class BuildingCreate(BaseModel):
@@ -43,15 +41,13 @@ class BuildingCreate(BaseModel):
 
 
 class BuildingOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     name: str
     address: str
     heritage_level: str
     description: str
     created_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True
 
 
 class PermitCreate(BaseModel):
@@ -63,6 +59,7 @@ class PermitCreate(BaseModel):
 
 
 class PermitOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     building_id: int
     building_name: Optional[str] = None
@@ -78,12 +75,8 @@ class PermitOut(BaseModel):
     heritage_approved: Optional[bool] = None
     safety_approved: Optional[bool] = None
 
-    class Config:
-        from_attributes = True
-
 
 class ApprovalCreate(BaseModel):
-    permit_id: int
     approval_type: str
     result: str
     opinion: str = ""
@@ -91,6 +84,7 @@ class ApprovalCreate(BaseModel):
 
 
 class ApprovalOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     permit_id: int
     approver_id: int
@@ -100,9 +94,6 @@ class ApprovalOut(BaseModel):
     opinion: str
     conditions: str
     created_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True
 
 
 class InspectionCreate(BaseModel):
@@ -115,6 +106,7 @@ class InspectionCreate(BaseModel):
 
 
 class InspectionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     permit_id: int
     inspector_id: int
@@ -125,9 +117,6 @@ class InspectionOut(BaseModel):
     hazard_level: str
     remark: str
     inspected_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True
 
 
 class HazardCreate(BaseModel):
@@ -150,6 +139,7 @@ class HazardRecheck(BaseModel):
 
 
 class HazardOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     permit_id: int
     inspection_id: Optional[int] = None
@@ -165,9 +155,6 @@ class HazardOut(BaseModel):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
-    class Config:
-        from_attributes = True
-
 
 class DemolitionCreate(BaseModel):
     permit_id: int
@@ -181,6 +168,7 @@ class DemolitionAccept(BaseModel):
 
 
 class DemolitionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     permit_id: int
     demolish_date: str
@@ -194,11 +182,9 @@ class DemolitionOut(BaseModel):
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 
-    class Config:
-        from_attributes = True
-
 
 class AuditLogOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     id: int
     user_id: int
     user_name: Optional[str] = None
@@ -207,6 +193,3 @@ class AuditLogOut(BaseModel):
     target_id: int
     detail: str
     created_at: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True

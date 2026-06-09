@@ -18,7 +18,17 @@ request.interceptors.request.use((config) => {
 request.interceptors.response.use(
   (response) => response.data,
   (error) => {
-    const msg = error.response?.data?.detail || '请求失败'
+    let msg = '请求失败'
+    const data = error.response?.data
+    if (data) {
+      if (typeof data.detail === 'string') {
+        msg = data.detail
+      } else if (Array.isArray(data.detail)) {
+        msg = data.detail.map(e => e.msg || e.message || String(e)).join('; ')
+      } else if (data.message) {
+        msg = data.message
+      }
+    }
     if (error.response?.status === 401) {
       logout()
       window.location.href = '/login'
